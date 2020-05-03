@@ -1,4 +1,5 @@
 import swing._
+import swing.event.MouseClicked
 
 object Main {
 
@@ -33,7 +34,7 @@ object Main {
 
       val top = new MainFrame {
         title = "Scandelbrot"
-        contents = new MandelbrotViewer(width, height)
+        contents = new MandelbrotViewer(ComplexViewport(width, height, Complex(-2, -2), 4))
       }
       top.pack()
       top.visible = true
@@ -42,13 +43,21 @@ object Main {
 
 }
 
-class MandelbrotViewer(var width: Int, var height: Int, var topLeft: Complex=Complex(-2, -2), var scale: Double=4) extends Component {
+class MandelbrotViewer(var viewport: ComplexViewport) extends Component {
 
-  preferredSize = new Dimension(width, height)
+  preferredSize = new Dimension(viewport.width, viewport.height)
+
+  listenTo(mouse.clicks)
+  reactions += {
+    case e: MouseClicked => {
+      viewport = viewport.zoomInOn(e.point.x, e.point.y, 0.5)
+      repaint()
+    }
+  }
 
   override def paintComponent(g: Graphics2D): Unit = {
     super.paintComponent(g)
-    val img = MandelbrotRenderer.render(width, height, topLeft, scale)
+    val img = MandelbrotRenderer.render(viewport)
     g.drawImage(img, 0, 0, null)
   }
 }
