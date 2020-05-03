@@ -4,6 +4,10 @@ case class Complex(re: Double, im: Double) {
     Complex(re + other.re, im + other.im)
   }
 
+  def *(factor: Double): Complex = {
+    Complex(re * factor, im * factor)
+  }
+
   def **(pow: Int): Complex = {
     pow match {
       case 2 => Complex(re * re - im * im, 2 * re * im)

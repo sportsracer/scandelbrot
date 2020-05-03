@@ -27,6 +27,13 @@ class ComplexTest extends FlatSpec {
     cSum.im should equal (~3.0)
   }
 
+  it should "support multiplication" in {
+    val c1 = Complex(3.5, -1)
+    val cMult = c1 * 2.0
+    cMult.re should equal (~7.0)
+    cMult.im should equal (~(-2.0))
+  }
+
   it should "support squaring" in {
     val c = Complex(2, 3)
     val cSquared = c ** 2
