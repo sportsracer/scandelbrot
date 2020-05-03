@@ -57,7 +57,7 @@ class MandelbrotViewer(var viewport: ComplexViewport) extends Component {
 
   override def paintComponent(g: Graphics2D): Unit = {
     super.paintComponent(g)
-    val img = MandelbrotRenderer.render(viewport)
+    val img = ColorfulMandelbrotRenderer.render(viewport)
     g.drawImage(img, 0, 0, null)
   }
 }

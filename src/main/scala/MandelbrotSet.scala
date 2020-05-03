@@ -7,7 +7,7 @@ object MandelbrotSet {
     }
   }
 
-  val maxIterations = 100
+  val maxIterations = 256
 
   /**
    * How many steps does it take to exceed the sphere with radius 2, for f_c = z ** 2 + c applied in iteration? Returns
