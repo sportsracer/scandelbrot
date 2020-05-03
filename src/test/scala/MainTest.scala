@@ -1,17 +1,18 @@
-import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest._
+import org.scalatest.matchers.should.Matchers._
 
-class MainTest extends AnyFunSuite {
-  test("Main.parseOptions") {
+class MainTest extends FlatSpec {
+
+  "Main" should "parse command line options" in {
     val noOptions = Main.parseOptions(Nil, Main.defaults)
-    assert(noOptions(Symbol("width")) == Main.defaults(Symbol("width")))
-    assert(noOptions(Symbol("height")) == Main.defaults(Symbol("height")))
+    noOptions(Symbol("width")) should equal (Main.defaults(Symbol("width")))
+    noOptions(Symbol("height")) should equal (Main.defaults(Symbol("height")))
 
     val options = Main.parseOptions("--width" :: "1024" :: "--height" :: "768" :: Nil, Main.defaults)
-    assert(options(Symbol("width")) == 1024)
-    assert(options(Symbol("height")) == 768)
+    options(Symbol("width")) should equal (1024)
+    options(Symbol("height")) should equal (768)
 
-    assertThrows[IllegalArgumentException] {
-      Main.parseOptions("--nonsense" :: "--options" :: Nil)
-    }
+    an [IllegalArgumentException] should be thrownBy Main.parseOptions("--nonsense" :: "--options" :: Nil)
   }
+
 }
