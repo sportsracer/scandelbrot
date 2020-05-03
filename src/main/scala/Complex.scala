@@ -1,12 +1,12 @@
-class Complex(val re: Double, val im: Double) {
+case class Complex(re: Double, im: Double) {
 
   def +(other: Complex): Complex = {
-    new Complex(re + other.re, im + other.im)
+    Complex(re + other.re, im + other.im)
   }
 
   def **(pow: Int): Complex = {
     pow match {
-      case 2 => new Complex(re * re - im * im, 2 * re * im)
+      case 2 => Complex(re * re - im * im, 2 * re * im)
       case _ => throw new IllegalArgumentException("Only implemented for power 2")
     }
   }
