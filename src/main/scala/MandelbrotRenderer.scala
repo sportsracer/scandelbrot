@@ -6,23 +6,41 @@ import java.awt.image.BufferedImage
  * screen
  * @param width Width of the image to be rendered
  * @param height Height of the image to be rendered
- * @param topLeft Complex number at (0, 0) top-left point in image
+ * @param center Complex number at center of image
  * @param scale Top-right point in image is (topLeft.re + scale, topLeft.im)
  */
-case class ComplexViewport(width: Int, height: Int, topLeft: Complex, scale: Double) {
+case class ComplexViewport(width: Int, height: Int, center: Complex, scale: Double) {
+
+  /**
+   * What magnitude on the imaginary axis does `height` scale to?
+   */
+  def verticalScale: Double = {
+    scale * height / width
+  }
 
   /** Convert from image space to represented complex number */
   def imgSpaceToComplex(x: Int, y: Int): Complex = {
-    Complex(topLeft.re + scale * x / width, topLeft.im + scale * y / height * (width / height))
+    val topLeft = Complex(center.re - scale / 2f, center.im - verticalScale / 2f)
+    Complex(topLeft.re + scale * x / width, topLeft.im + verticalScale * y / height)
   }
 
-  /** Create a new viewport centered around (x, y), and zoomed in by `zoomFactor` */
-  def zoomInOn(x: Int, y: Int, zoomFactor: Double): ComplexViewport = {
-    val newCenter = imgSpaceToComplex(x, y)
-    val newScale = scale * zoomFactor
-    val newTopLeft = Complex(newCenter.re - newScale / 2f, newCenter.im - newScale / 2f * (height / width))
-    ComplexViewport(width, height, newTopLeft, newScale)
+  /** Create a new viewport zoomed in by `factor` */
+  def zoomBy(factor: Double): ComplexViewport = {
+    val newScale = scale / factor
+    ComplexViewport(width, height, center, newScale)
   }
+
+  /** Create a new viewport centered around (x, y) */
+  def centerOn(x: Int, y: Int): ComplexViewport = {
+    val newCenter = imgSpaceToComplex(x, y)
+    this centerOn newCenter
+  }
+
+  /** Create a new viewport centered around `newCenter` */
+  def centerOn(newCenter: Complex): ComplexViewport = {
+    ComplexViewport(width, height, newCenter, scale)
+  }
+
 }
 
 abstract class MandelbrotRenderer {

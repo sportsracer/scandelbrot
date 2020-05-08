@@ -34,7 +34,7 @@ object Main {
 
       val top = new MainFrame {
         title = "Scandelbrot"
-        contents = new MandelbrotViewer(ComplexViewport(width, height, Complex(-2, -2), 4))
+        contents = new MandelbrotViewer(ComplexViewport(width, height, Complex(0, 0), 4))
       }
       top.pack()
       top.visible = true
@@ -50,7 +50,7 @@ class MandelbrotViewer(var viewport: ComplexViewport) extends Component {
   listenTo(mouse.clicks)
   reactions += {
     case e: MouseClicked => {
-      viewport = viewport.zoomInOn(e.point.x, e.point.y, 0.5)
+      viewport = viewport centerOn (e.point.x, e.point.y) zoomBy 2
       repaint()
     }
   }
