@@ -1,3 +1,5 @@
+import scala.annotation.tailrec
+
 object MandelbrotSet {
 
   /** Helper method to be able to write `c inMandelbrotSet` for `c: Complex` */
@@ -14,24 +16,26 @@ object MandelbrotSet {
    * `None` if the value seems to be bounded (determined by reaching a maximum number of iterations)
    * @param c Complex number we're testing for
    * @param z Value we're iterating on
-   * @param depth Counter to determine recursion depth
    * @return Number of steps required to exit sphere of radius 2, or None if value is bounded
    */
-  def iterate(c: Complex, z: Complex=Complex(0, 0), depth: Int=0): Option[Int] = {
-    if (depth >= maxIterations) {
-      return None
+  def iterate(c: Complex, z: Complex=Complex(0, 0)): Option[Int] = {
+
+    @tailrec
+    def iterateTCO(c: Complex, z: Complex, depth: Int): Int = {
+      if (depth >= maxIterations) {
+        return Integer.MAX_VALUE
+      }
+
+      if (z.magnitude() >= 2) {
+        return depth
+      }
+
+      val zNext = z ** 2 + c
+      iterateTCO(c, zNext, depth + 1)
     }
 
-    if (z.magnitude() >= 2) {
-      return Some(0)
-    }
-
-    val zNext = z ** 2 + c
-    val nextStep = iterate(c, zNext, depth+1)
-    nextStep match {
-      case Some(i) => Some(1 + i)
-      case None => None
-    }
+    val steps = iterateTCO(c, z, 0)
+    if (steps == Integer.MAX_VALUE) None else Some(steps)
   }
 
   /**
