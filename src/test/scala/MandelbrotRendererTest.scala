@@ -6,7 +6,7 @@ import DoubleHelper._
 class MandelbrotRendererTest extends FlatSpec {
 
   def fixture: ComplexViewport = {
-    ComplexViewport(256, 256, Complex(-4, -4), 8)
+    ComplexViewport(256, 256, Complex(0, 0), 8)
   }
 
   "ComplexViewport" should "convert screen-space coordinates to complex numbers" in {
@@ -23,7 +23,7 @@ class MandelbrotRendererTest extends FlatSpec {
 
   it should "zoom in on a clicked point" in {
     val viewport = fixture
-    val zoomedViewport = viewport.zoomInOn(128, 128, 0.5)
+    val zoomedViewport = viewport zoomBy 2
 
     zoomedViewport.topLeft.re should be > viewport.topLeft.re
     zoomedViewport.topLeft.im should be > viewport.topLeft.im

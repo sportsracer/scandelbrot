@@ -18,9 +18,12 @@ case class ComplexViewport(width: Int, height: Int, center: Complex, scale: Doub
     scale * height / width
   }
 
+  def topLeft: Complex = {
+    Complex(center.re - scale / 2f, center.im - verticalScale / 2f)
+  }
+
   /** Convert from image space to represented complex number */
   def imgSpaceToComplex(x: Int, y: Int): Complex = {
-    val topLeft = Complex(center.re - scale / 2f, center.im - verticalScale / 2f)
     Complex(topLeft.re + scale * x / width, topLeft.im + verticalScale * y / height)
   }
 
