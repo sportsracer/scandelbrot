@@ -1,5 +1,5 @@
 import swing._
-import swing.event.MouseClicked
+import swing.event.{MouseClicked, UIElementResized}
 
 object Main {
 
@@ -34,8 +34,9 @@ object Main {
 
       val top = new MainFrame {
         title = "Scandelbrot"
-        contents = new MandelbrotViewer(ComplexViewport(width, height, Complex(0, 0), 4))
+        contents = new MandelbrotViewer(width, height)
       }
+
       top.pack()
       top.visible = true
     }
@@ -43,14 +44,30 @@ object Main {
 
 }
 
-class MandelbrotViewer(var viewport: ComplexViewport) extends Component {
+class MandelbrotViewer(width: Int, height: Int, center: Complex=Complex(0, 0), scale: Double=4) extends Component {
 
-  preferredSize = new Dimension(viewport.width, viewport.height)
+  preferredSize = new Dimension(width, height)
+  var viewport: ComplexViewport = ComplexViewport(width, height, center, scale)
 
+  // when clicked, re-center and zoom
   listenTo(mouse.clicks)
   reactions += {
     case e: MouseClicked => {
-      viewport = viewport centerOn (e.point.x, e.point.y) zoomBy 2
+      val zoomFactor = e.peer.getButton match {
+        case 1 => 2   // zoom in
+        case 3 => 0.5 // zoom out
+        case _ => 1
+      }
+      viewport = viewport centerOn (e.point.x, e.point.y) zoomBy zoomFactor
+      repaint()
+    }
+  }
+
+  // handle resizing
+  listenTo(this)
+  reactions += {
+    case e: UIElementResized => {
+      viewport = ComplexViewport(this.size.width, this.size.height, viewport.center, viewport.scale)
       repaint()
     }
   }
