@@ -64,22 +64,28 @@ abstract class MandelbrotRenderer {
   def render(viewport: ComplexViewport): BufferedImage = {
     val img = new BufferedImage(viewport.width, viewport.height, BufferedImage.TYPE_INT_RGB)
 
-    val pixels = (
-        for (x <- 0 until img.getWidth(); y <- 0 until img.getHeight())
-        yield (x, y)
-      ).toList.par
+    // Put y-values of rows to be rendered in parallel collection
+    val ys = (
+      for (y <- 0 until viewport.height)
+        yield y
+    ).par
 
-    val colors = pixels.map({
-      case (x, y) => {
-        val c = viewport.imgSpaceToComplex(x, y)
-        val steps = MandelbrotSet.iterate(c)
-        getColor(steps)
-      }
+    // Compute each row as array of colors in parallel
+    val rows = ys.map(y => {
+      (
+        for (x <- 0 until viewport.width) yield {
+          val c = viewport.imgSpaceToComplex(x, y)
+          val steps = MandelbrotSet.iterate(c)
+          val color = getColor(steps)
+          color.getRGB
+        }
+      ).toArray
     })
 
-    (pixels zip colors).foreach({
-      case ((x, y), color) => {
-        img.setRGB(x, y, color.getRGB)
+    // Update the rendered image row by row
+    (ys zip rows).foreach({
+      case (y, row) => {
+        img.setRGB(0, y, viewport.width - 1, 1, row, 0, viewport.width)
       }
     })
 
