@@ -1,3 +1,5 @@
+import scala.collection.parallel.CollectionConverters._
+
 import java.awt.Color
 import java.awt.image.BufferedImage
 
@@ -62,14 +64,24 @@ abstract class MandelbrotRenderer {
   def render(viewport: ComplexViewport): BufferedImage = {
     val img = new BufferedImage(viewport.width, viewport.height, BufferedImage.TYPE_INT_RGB)
 
-    for (x <- 0 until img.getWidth()) {
-      for (y <- 0 until img.getHeight()) {
+    val pixels = (
+        for (x <- 0 until img.getWidth(); y <- 0 until img.getHeight())
+        yield (x, y)
+      ).toList.par
+
+    val colors = pixels.map({
+      case (x, y) => {
         val c = viewport.imgSpaceToComplex(x, y)
         val steps = MandelbrotSet.iterate(c)
-        val color = getColor(steps)
+        getColor(steps)
+      }
+    })
+
+    (pixels zip colors).foreach({
+      case ((x, y), color) => {
         img.setRGB(x, y, color.getRGB)
       }
-    }
+    })
 
     img
   }
