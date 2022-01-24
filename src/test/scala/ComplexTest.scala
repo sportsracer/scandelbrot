@@ -8,7 +8,7 @@ object DoubleHelper {
   val epsilon = 0.0000001
 
   implicit class FuzzyDouble(d: Double) {
-    def unary_~(): Spread[Double] = {
+    def unary_~ : Spread[Double] = {
       d +- epsilon
     }
   }
