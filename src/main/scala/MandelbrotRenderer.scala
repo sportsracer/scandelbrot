@@ -111,9 +111,10 @@ trait ColorfulRendering {
     steps match {
       case Some(s) => {
         // these values were hand-tweaked to look aesthetically pleasing; no meaning behind the magic numbers
-        val hue = boundBy(10, 200, s) + .8f
-        val sat = (1f - boundBy(1, 256, s))
-        val bri = boundBy(1, 50, s) * .8f
+        val sF = s.toFloat
+        val hue = boundBy(10, 200, sF) + .8f
+        val sat = (1f - boundBy(1, 256, sF))
+        val bri = boundBy(1, 50, sF) * .8f
         new Color(Color.HSBtoRGB(hue, sat, bri))
       }
       case None => Color.WHITE

@@ -1,9 +1,9 @@
-import org.scalatest._
+import org.scalatest.flatspec._
 import org.scalatest.matchers.should.Matchers._
 
 import DoubleHelper._
 
-class MandelbrotRendererTest extends FlatSpec {
+class MandelbrotRendererTest extends AnyFlatSpec {
 
   def fixture: ComplexViewport = {
     ComplexViewport(256, 256, Complex(0, 0), 8)

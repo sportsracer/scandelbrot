@@ -1,5 +1,5 @@
 import org.scalactic.TripleEqualsSupport.Spread
-import org.scalatest._
+import org.scalatest.flatspec._
 import org.scalatest.matchers.should.Matchers._
 
 
@@ -17,7 +17,7 @@ object DoubleHelper {
 import DoubleHelper._
 
 
-class ComplexTest extends FlatSpec {
+class ComplexTest extends AnyFlatSpec {
 
   "Complex number" should "support addition" in {
     val c1 = Complex(3.5, 0)

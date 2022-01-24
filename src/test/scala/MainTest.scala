@@ -1,7 +1,7 @@
-import org.scalatest._
+import org.scalatest.flatspec._
 import org.scalatest.matchers.should.Matchers._
 
-class MainTest extends FlatSpec {
+class MainTest extends AnyFlatSpec {
 
   "Main" should "parse command line options" in {
     val noOptions = Main.parseOptions(Nil, Main.defaults)
