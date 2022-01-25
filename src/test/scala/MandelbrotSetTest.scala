@@ -22,4 +22,3 @@ class MandelbrotSetTest extends AnyFlatSpec:
     assert(steps2.isDefined)
     steps1.get should be > steps2.get
   }
-

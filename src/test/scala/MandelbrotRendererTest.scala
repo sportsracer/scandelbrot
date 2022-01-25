@@ -12,12 +12,12 @@ class MandelbrotRendererTest extends AnyFlatSpec:
     val viewport = fixture
     // check that top-left pixel corresponds to `topLeft` from viewport
     val topLeft = viewport.imgSpaceToComplex(0, 0)
-    topLeft.re should equal (~(-4.0))
-    topLeft.im should equal (~(-4.0))
+    topLeft.re should equal(~(-4.0))
+    topLeft.im should equal(~(-4.0))
 
     val center = viewport.imgSpaceToComplex(128, 128)
-    center.re should equal (~0.0)
-    center.im should equal (~0.0)
+    center.re should equal(~0.0)
+    center.im should equal(~0.0)
   }
 
   it should "zoom in on a clicked point" in {
@@ -35,4 +35,3 @@ class MandelbrotRendererTest extends AnyFlatSpec:
     // Check that the two points are colored differently
     img.getRGB(128, 128) should not equal img.getRGB(0, 0)
   }
-
