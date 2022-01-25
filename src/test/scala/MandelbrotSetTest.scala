@@ -1,7 +1,7 @@
 import org.scalatest.flatspec._
 import org.scalatest.matchers.should.Matchers._
 
-class MandelbrotSetTest extends AnyFlatSpec {
+class MandelbrotSetTest extends AnyFlatSpec:
 
   "MandelbrotSet" should "contain these numbers" in {
     assert(MandelbrotSet contains Complex(0, 0))
@@ -23,4 +23,3 @@ class MandelbrotSetTest extends AnyFlatSpec {
     steps1.get should be > steps2.get
   }
 
-}

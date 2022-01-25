@@ -3,11 +3,10 @@ import org.scalatest.matchers.should.Matchers._
 
 import DoubleHelper._
 
-class MandelbrotRendererTest extends AnyFlatSpec {
+class MandelbrotRendererTest extends AnyFlatSpec:
 
-  def fixture: ComplexViewport = {
+  def fixture: ComplexViewport =
     ComplexViewport(256, 256, Complex(0, 0), 8)
-  }
 
   "ComplexViewport" should "convert screen-space coordinates to complex numbers" in {
     val viewport = fixture
@@ -37,4 +36,3 @@ class MandelbrotRendererTest extends AnyFlatSpec {
     img.getRGB(128, 128) should not equal img.getRGB(0, 0)
   }
 
-}

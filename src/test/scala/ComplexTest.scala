@@ -4,20 +4,17 @@ import org.scalatest.matchers.should.Matchers._
 
 
 /** Helper method for comparing doubles */
-object DoubleHelper {
+object DoubleHelper:
   val epsilon = 0.0000001
 
-  implicit class FuzzyDouble(d: Double) {
-    def unary_~ : Spread[Double] = {
+  implicit class FuzzyDouble(d: Double):
+    def unary_~ : Spread[Double] =
       d +- epsilon
-    }
-  }
 
-}
 import DoubleHelper._
 
 
-class ComplexTest extends AnyFlatSpec {
+class ComplexTest extends AnyFlatSpec:
 
   "Complex number" should "support addition" in {
     val c1 = Complex(3.5, 0)
@@ -52,4 +49,3 @@ class ComplexTest extends AnyFlatSpec {
     c.magnitude() should equal (~Math.sqrt(8.0))
   }
 
-}

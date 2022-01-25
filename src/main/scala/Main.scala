@@ -1,7 +1,7 @@
 import swing._
 import swing.event.{MouseClicked, UIElementResized}
 
-object Main {
+object Main:
 
   type OptionMap = Map[Symbol, Any]
 
@@ -12,22 +12,20 @@ object Main {
 
   val usage: String = "Usage: [--width INT] [--height INT]"
 
-  def parseOptions(args: List[String], defaults: OptionMap = Map()): OptionMap = {
-    args match {
+  def parseOptions(args: List[String], defaults: OptionMap = Map()): OptionMap =
+    args match
       case Nil => defaults
       case "--width" :: value :: tail => parseOptions(tail, defaults) ++ Map(Symbol("width") -> value.toInt)
       case "--height" :: value :: tail => parseOptions(tail, defaults) ++ Map(Symbol("height") -> value.toInt)
       case option :: _ => throw new IllegalArgumentException("Unknown option " + option)
-    }
-  }
 
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit =
     var options: Option[OptionMap] = None
-    try {
+    try
       options = Some(parseOptions(args.toList, defaults))
-    } catch {
+    catch
       case e: IllegalArgumentException => print(usage); System.exit(1)
-    } finally {
+    finally
       val opts = options.get
       val width = opts(Symbol("width")).asInstanceOf[Int]
       val height = opts(Symbol("height")).asInstanceOf[Int]
@@ -39,10 +37,7 @@ object Main {
 
       top.pack()
       top.visible = true
-    }
-  }
 
-}
 
 class MandelbrotViewer(width: Int, height: Int, center: Complex=Complex(0, 0), scale: Double=4) extends Component {
 
@@ -53,11 +48,10 @@ class MandelbrotViewer(width: Int, height: Int, center: Complex=Complex(0, 0), s
   listenTo(mouse.clicks)
   reactions += {
     case e: MouseClicked => {
-      val zoomFactor = e.peer.getButton match {
+      val zoomFactor = e.peer.getButton match
         case 1 => 2   // zoom in
         case 3 => 0.5 // zoom out
         case _ => 1
-      }
       viewport = viewport centerOn (e.point.x, e.point.y) zoomBy zoomFactor
       repaint()
     }
@@ -72,9 +66,8 @@ class MandelbrotViewer(width: Int, height: Int, center: Complex=Complex(0, 0), s
     }
   }
 
-  override def paintComponent(g: Graphics2D): Unit = {
+  override def paintComponent(g: Graphics2D): Unit =
     super.paintComponent(g)
     val img = ColorfulMandelbrotRenderer.render(viewport)
     g.drawImage(img, 0, 0, null)
-  }
 }
