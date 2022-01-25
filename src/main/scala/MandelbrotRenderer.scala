@@ -55,7 +55,7 @@ abstract class MandelbrotRenderer:
    * @return Hopefully a very pretty image of a Mandelbrot set
    */
   def render(viewport: ComplexViewport): BufferedImage =
-    val img = new BufferedImage(viewport.width, viewport.height, BufferedImage.TYPE_INT_RGB)
+    val img = BufferedImage(viewport.width, viewport.height, BufferedImage.TYPE_INT_RGB)
 
     // Put y-values of rows to be rendered in parallel collection
     val ys = (
@@ -64,22 +64,20 @@ abstract class MandelbrotRenderer:
     ).par
 
     // Compute each row as array of colors in parallel
-    val rows = ys.map(y => {
+    val rows = ys.map(y =>
       (
-        for x <- 0 until viewport.width yield {
+        for x <- 0 until viewport.width yield
           val c = viewport.imgSpaceToComplex(x, y)
           val steps = MandelbrotSet.iterate(c)
           val color = getColor(steps)
           color.getRGB
-        }
       ).toArray
-    })
+    )
 
     // Update the rendered image row by row
     (ys zip rows).foreach({
-      case (y, row) => {
+      case (y, row) =>
         img.setRGB(0, y, viewport.width - 1, 1, row, 0, viewport.width)
-      }
     })
 
     img
@@ -97,14 +95,13 @@ trait ColorfulRendering:
 
   def getColor(steps: Option[Int]): Color =
     steps match
-      case Some(s) => {
+      case Some(s) =>
         // these values were hand-tweaked to look aesthetically pleasing; no meaning behind the magic numbers
         val sF = s.toFloat
         val hue = boundBy(10, 200, sF) + .8f
         val sat = (1f - boundBy(1, 256, sF))
         val bri = boundBy(1, 50, sF) * .8f
-        new Color(Color.HSBtoRGB(hue, sat, bri))
-      }
+        Color(Color.HSBtoRGB(hue, sat, bri))
       case None => Color.WHITE
 
 

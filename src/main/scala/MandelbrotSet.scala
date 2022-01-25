@@ -40,4 +40,3 @@ object MandelbrotSet:
   def contains(c: Complex): Boolean =
     val steps = iterate(c)
     steps.isEmpty
-
