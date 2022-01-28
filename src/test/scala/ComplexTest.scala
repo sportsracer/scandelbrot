@@ -44,5 +44,7 @@ class ComplexTest extends AnyFlatSpec:
 
   it should "have a magnitude" in {
     val c = Complex(2, 2)
-    c.magnitude() should equal(~Math.sqrt(8.0))
+    val magnitudeSquared = 8.0
+    c.magnitudeSquared should equal(~magnitudeSquared)
+    c.magnitude should equal(~Math.sqrt(magnitudeSquared))
   }

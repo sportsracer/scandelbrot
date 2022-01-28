@@ -7,7 +7,8 @@ object MandelbrotSet:
     def inMandelbrotSet(): Boolean =
       contains(c)
 
-  val maxIterations = 256
+  inline val MaxIterations = 256
+  inline val BoundarySquared = 2 * 2
 
   /** How many steps does it take to exceed the sphere with radius 2, for f_c =
     * z ** 2 + c applied in iteration? Returns `None` if the value seems to be
@@ -24,9 +25,9 @@ object MandelbrotSet:
 
     @tailrec
     def iterateTCO(c: Complex, z: Complex, depth: Int): Int =
-      if depth >= maxIterations then return Integer.MAX_VALUE
+      if depth >= MaxIterations then return Integer.MAX_VALUE
 
-      if z.magnitude() >= 2 then return depth
+      if z.magnitudeSquared >= BoundarySquared then return depth
 
       val zNext = z ** 2 + c
       iterateTCO(c, zNext, depth + 1)
