@@ -2,11 +2,6 @@ import scala.annotation.tailrec
 
 object MandelbrotSet:
 
-  /** Helper method to be able to write `c inMandelbrotSet` for `c: Complex` */
-  implicit class MandelbrotComplex(c: Complex):
-    def inMandelbrotSet(): Boolean =
-      contains(c)
-
   inline val MaxIterations = 256
   inline val BoundarySquared = 2 * 2
 
@@ -41,6 +36,11 @@ object MandelbrotSet:
     * @return
     *   True iff c is in M
     */
-  def contains(c: Complex): Boolean =
+  infix def contains(c: Complex): Boolean =
     val steps = iterate(c)
     steps.isEmpty
+
+/** Helper method to be able to write `c inMandelbrotSet` for `c: Complex` */
+extension (c: Complex)
+  def inMandelbrotSet: Boolean =
+    MandelbrotSet.contains(c)

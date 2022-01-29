@@ -4,6 +4,7 @@ import org.scalatest.matchers.should.Matchers._
 class MandelbrotSetTest extends AnyFlatSpec:
 
   "MandelbrotSet" should "contain these numbers" in {
+    assert(Complex(0, 0).inMandelbrotSet)
     assert(MandelbrotSet contains Complex(0, 0))
     assert(MandelbrotSet contains Complex(0.25, 0))
     assert(MandelbrotSet contains Complex(0, 0.5))

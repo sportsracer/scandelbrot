@@ -36,12 +36,6 @@ class ComplexTest extends AnyFlatSpec:
     cSquared.im should equal(~12.0)
   }
 
-  it should "not support raising to a power other than 2" in {
-    val c = Complex(1, 0)
-    an[IllegalArgumentException] should be thrownBy c ** 1
-    an[IllegalArgumentException] should be thrownBy c ** 3
-  }
-
   it should "have a magnitude" in {
     val c = Complex(2, 2)
     val magnitudeSquared = 8.0
