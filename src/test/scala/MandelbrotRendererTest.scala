@@ -31,7 +31,7 @@ class MandelbrotRendererTest extends AnyFlatSpec:
   "MandelbrotRenderer" should "render a valid image" in {
     // Construct an image so that the top left pixel definitely is not in M, but the center is
     val viewport = fixture
-    val img = ColorfulMandelbrotRenderer.render(viewport)
+    val img = MandelbrotRenderer.render(viewport)(using BlackWhiteColorizer)
     // Check that the two points are colored differently
     img.getRGB(128, 128) should not equal img.getRGB(0, 0)
   }
