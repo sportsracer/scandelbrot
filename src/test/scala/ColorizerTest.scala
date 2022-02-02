@@ -5,9 +5,11 @@ import org.scalatest.flatspec._
 class ColorizerTest extends AnyFlatSpec:
 
   "BlackWhiteColorizer" should "color pixels inside the Mandelbrot set white, all others black" in {
-    assert(BlackWhiteColorizer.getColor(None) == Color.WHITE)
-    assert(BlackWhiteColorizer.getColor(Some(1)) == Color.BLACK)
-    assert(BlackWhiteColorizer.getColor(Some(256)) == Color.BLACK)
+    import Orbits.*
+
+    assert(BlackWhiteColorizer.getColor(Orbit(Nil, None)) == Color.WHITE)
+    assert(BlackWhiteColorizer.getColor(Orbit(Nil, Some(1))) == Color.BLACK)
+    assert(BlackWhiteColorizer.getColor(Orbit(Nil, Some(256))) == Color.BLACK)
   }
 
   "boundBy" should "scale values to the interval [0, 1]" in {

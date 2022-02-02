@@ -1,34 +1,48 @@
 import scala.annotation.tailrec
 
+/** An orbit produced by repeatedly applying the Mandelbrot equation. */
+object Orbits:
+
+  opaque type Orbit = (List[Complex], Option[Int])
+
+  object Orbit:
+    /** @param points
+      *   Sequence of complex numbers produced by repeated iteration, with the
+      *   original number at the rightmost position
+      * @param steps
+      *   Some(steps) it took for the orbit to escape the bounding sphere, or
+      *   `None` if it remained bounded
+      */
+    def apply(points: List[Complex], steps: Option[Int]): Orbit =
+      (points, steps)
+
+  extension (o: Orbit)
+    def points: List[Complex] = o._1
+    def steps: Option[Int] = o._2
+    def bounded: Boolean = o.steps.isEmpty
+
 object MandelbrotSet:
+
+  import Orbits.*
 
   inline val MaxIterations = 256
   inline val BoundarySquared = 2 * 2
 
-  /** How many steps does it take to exceed the sphere with radius 2, for f_c =
-    * z ** 2 + c applied in iteration? Returns `None` if the value seems to be
-    * bounded (determined by reaching a maximum number of iterations)
-    * @param c
-    *   Complex number we're testing for
-    * @param z
-    *   Value we're iterating on
-    * @return
-    *   Number of steps required to exit sphere of radius 2, or None if value is
-    *   bounded
-    */
-  def iterate(c: Complex, z: Complex = Complex(0, 0)): Option[Int] =
+  /** Calculate the orbit for a complex number c! */
+  def orbit(c: Complex): Orbit =
 
     @tailrec
-    def iterateTCO(c: Complex, z: Complex, depth: Int): Int =
-      if depth >= MaxIterations then return Integer.MAX_VALUE
+    def orbitTCO(orbit: List[Complex], depth: Int): Orbit =
+      if depth >= MaxIterations then return Orbit(orbit, None)
 
-      if z.magnitudeSquared >= BoundarySquared then return depth
+      val z = orbit.head
+      if z.magnitudeSquared >= BoundarySquared then
+        return Orbit(orbit, Some(depth))
 
       val zNext = z ** 2 + c
-      iterateTCO(c, zNext, depth + 1)
+      orbitTCO(zNext :: orbit, depth + 1)
 
-    val steps = iterateTCO(c, z, 0)
-    if steps == Integer.MAX_VALUE then None else Some(steps)
+    orbitTCO(Complex.origin :: Nil, 0)
 
   /** Is this complex number in the Mandelbrot set?
     * @param c
@@ -37,8 +51,8 @@ object MandelbrotSet:
     *   True iff c is in M
     */
   infix def contains(c: Complex): Boolean =
-    val steps = iterate(c)
-    steps.isEmpty
+    val orbit = this.orbit(c)
+    orbit.bounded
 
 /** Helper method to be able to write `c inMandelbrotSet` for `c: Complex` */
 extension (c: Complex)

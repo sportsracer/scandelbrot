@@ -1,23 +1,24 @@
 import java.awt.Color
 
+import Orbits.*
+
 trait Colorizer:
 
   /** Compute the color that a complex number should be visualized with.
-    * @param steps
-    *   `None` if number is in Mandelbrot set, number of steps it took to exit
-    *   sphere with radius 2 otherwise
+    * @param orbit
+    *   An orbit produced by repeatedly applying the Mandelbrot equation
     * @return
     *   Color to visualize this number with
     */
-  def getColor(steps: Option[Int]): Color
+  def getColor(orbit: Orbit): Color
 
 /** Simplest colorizer – paint the inside of the Mandelbrot white, everything
   * else black.
   */
 object BlackWhiteColorizer extends Colorizer:
 
-  def getColor(steps: Option[Int]): Color =
-    steps match
+  def getColor(orbit: Orbit): Color =
+    orbit.steps match
       case Some(s) => Color.BLACK
       case None    => Color.WHITE
 
@@ -32,8 +33,8 @@ def boundBy(lower: Float, upper: Float)(value: Float): Float =
 /** Vary hue and intensity based on escape time. */
 object RainbowColorizer extends Colorizer:
 
-  def getColor(steps: Option[Int]): Color =
-    steps match
+  def getColor(orbit: Orbit): Color =
+    orbit.steps match
       case Some(s) =>
         // these values were hand-tweaked to look aesthetically pleasing; no meaning behind the magic numbers
         val sF = s.toFloat
@@ -48,8 +49,8 @@ object BlackWhiteSteppedColorizer extends Colorizer:
 
   private val bounds = boundBy(1, 128)
 
-  def getColor(steps: Option[Int]): Color =
-    steps match
+  def getColor(orbit: Orbit): Color =
+    orbit.steps match
       case Some(s) if s % 2 == 0 =>
         val bri = 0.3f + bounds(s.toFloat) * 0.6f
         Color(bri, bri, bri)

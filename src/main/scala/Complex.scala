@@ -17,3 +17,7 @@ case class Complex(re: Double, im: Double):
 
   override def toString(): String =
     s"$re + ${im}i"
+
+object Complex:
+
+  val origin = Complex(0, 0)

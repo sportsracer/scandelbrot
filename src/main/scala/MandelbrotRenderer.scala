@@ -77,8 +77,8 @@ object MandelbrotRenderer:
       (
         for x <- 0 until viewport.width yield
           val c = viewport.imgSpaceToComplex(x, y)
-          val steps = MandelbrotSet.iterate(c)
-          val color = colorizer.getColor(steps)
+          val orbit = MandelbrotSet.orbit(c)
+          val color = colorizer.getColor(orbit)
           color.getRGB
       ).toArray
     )
