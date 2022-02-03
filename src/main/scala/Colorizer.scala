@@ -23,8 +23,7 @@ object BlackWhiteColorizer extends Colorizer:
       case None    => Color.WHITE
 
 /** Return 0 if value is smaller than lower bound, 1 if larger than upper bound,
-  * or a linearly scaled value in [0, 1] if in between.
-  */
+  * or a linearly scaled value in [0, 1] if in between. */
 def boundBy(lower: Float, upper: Float)(value: Float): Float =
   if value < lower then 0f
   else if value > upper then 1f
@@ -44,15 +43,16 @@ object RainbowColorizer extends Colorizer:
         Color(Color.HSBtoRGB(hue, sat, bri))
       case None => Color.WHITE
 
-/** Color gray if escape time is even, black otherwise. */
-object BlackWhiteSteppedColorizer extends Colorizer:
+/** Color depending on how close a number's orbit gets to the origin. */
+object OrbitOriginTrapColorizer extends Colorizer:
 
-  private val bounds = boundBy(1, 128)
+  val ordering =
+    Ordering.fromLessThan[Complex](_.magnitudeSquared < _.magnitudeSquared)
 
   def getColor(orbit: Orbit): Color =
-    orbit.steps match
-      case Some(s) if s % 2 == 0 =>
-        val bri = 0.3f + bounds(s.toFloat) * 0.6f
-        Color(bri, bri, bri)
-      case Some(_) => Color.BLACK
-      case None    => Color.WHITE
+    val closest = orbit.points.min(ordering)
+    val magnitudeF = closest.magnitude.toFloat
+    val r = 1f - boundBy(0f, .5f)(magnitudeF)
+    val g = 1f - boundBy(0f, 2f)(magnitudeF)
+    val b = 1f - boundBy(0f, 4f)(magnitudeF)
+    Color(r, g, b)

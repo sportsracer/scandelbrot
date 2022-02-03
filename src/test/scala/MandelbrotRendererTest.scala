@@ -6,7 +6,7 @@ import DoubleHelper._
 class MandelbrotRendererTest extends AnyFlatSpec:
 
   def fixture: ComplexViewport =
-    ComplexViewport(256, 256, Complex(0, 0), 8)
+    ComplexViewport(256, 256, Complex.origin, 8)
 
   "ComplexViewport" should "convert screen-space coordinates to complex numbers" in {
     val viewport = fixture

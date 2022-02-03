@@ -2,11 +2,11 @@ import java.awt.Color
 
 import org.scalatest.flatspec._
 
+import Orbits.*
+
 class ColorizerTest extends AnyFlatSpec:
 
   "BlackWhiteColorizer" should "color pixels inside the Mandelbrot set white, all others black" in {
-    import Orbits.*
-
     assert(BlackWhiteColorizer.getColor(Orbit(Nil, None)) == Color.WHITE)
     assert(BlackWhiteColorizer.getColor(Orbit(Nil, Some(1))) == Color.BLACK)
     assert(BlackWhiteColorizer.getColor(Orbit(Nil, Some(256))) == Color.BLACK)

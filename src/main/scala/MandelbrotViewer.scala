@@ -5,12 +5,12 @@ import swing.event.{Key, KeyPressed, MouseClicked, UIElementResized}
 class MandelbrotViewer(
     width: Int,
     height: Int,
-    center: Complex = Complex(0, 0),
+    center: Complex = Complex.origin,
     scale: Double = 4
 ) extends Component:
 
   // Colorization methods to rotate between
-  private var colorizers = RainbowColorizer :: BlackWhiteSteppedColorizer :: Nil
+  private var colorizers = RainbowColorizer :: OrbitOriginTrapColorizer :: Nil
 
   private def rotateColorizer(): Unit =
     colorizers = colorizers.tail :+ colorizers.head

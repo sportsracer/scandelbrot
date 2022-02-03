@@ -42,7 +42,7 @@ object MandelbrotSet:
       val zNext = z ** 2 + c
       orbitTCO(zNext :: orbit, depth + 1)
 
-    orbitTCO(Complex.origin :: Nil, 0)
+    orbitTCO(c :: Nil, 0)
 
   /** Is this complex number in the Mandelbrot set?
     * @param c
