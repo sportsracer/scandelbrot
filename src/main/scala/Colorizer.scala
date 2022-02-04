@@ -23,14 +23,15 @@ object BlackWhiteColorizer extends Colorizer:
       case None    => Color.WHITE
 
 /** Return 0 if value is smaller than lower bound, 1 if larger than upper bound,
-  * or a linearly scaled value in [0, 1] if in between. */
+  * or a linearly scaled value in [0, 1] if in between.
+  */
 def boundBy(lower: Float, upper: Float)(value: Float): Float =
   if value < lower then 0f
   else if value > upper then 1f
   else (value - lower) / (upper - lower)
 
 /** Vary hue and intensity based on escape time. */
-object RainbowColorizer extends Colorizer:
+object EscapeTimeColorizer extends Colorizer:
 
   def getColor(orbit: Orbit): Color =
     orbit.steps match
@@ -40,11 +41,11 @@ object RainbowColorizer extends Colorizer:
         val hue = boundBy(10, 200)(sF) + .8f
         val sat = (1f - boundBy(1, 256)(sF))
         val bri = boundBy(1, 50)(sF) * .8f
-        Color(Color.HSBtoRGB(hue, sat, bri))
+        Color.getHSBColor(hue, sat, bri)
       case None => Color.WHITE
 
 /** Color depending on how close a number's orbit gets to the origin. */
-object OrbitOriginTrapColorizer extends Colorizer:
+object OriginOrbitTrapColorizer extends Colorizer:
 
   val ordering =
     Ordering.fromLessThan[Complex](_.magnitudeSquared < _.magnitudeSquared)
@@ -56,3 +57,23 @@ object OrbitOriginTrapColorizer extends Colorizer:
     val g = 1f - boundBy(0f, 2f)(magnitudeF)
     val b = 1f - boundBy(0f, 4f)(magnitudeF)
     Color(r, g, b)
+
+/** Color a point depending on the quadrant that its orbit escapes to. */
+object QuadrantOrbitTrapColorizer extends Colorizer:
+
+  // Every quadrant (top left, top right …) gets a base color
+  private def quadrantHue(orbit: Orbit): Float =
+    val point = orbit.points.head
+    (point.re >= 0, point.im >= 0) match
+      case (true, true)   => 0f
+      case (true, false)  => .08f
+      case (false, true)  => .16f
+      case (false, false) => .24f
+
+  // … and we vary this color depending on escape time
+  private def stepsHue(orbit: Orbit): Float =
+    if orbit.bounded then 0f else orbit.steps.get * .27f
+
+  def getColor(orbit: Orbit): Color =
+    val hue = quadrantHue(orbit) + stepsHue(orbit)
+    Color.getHSBColor(hue, 1f, 1f)

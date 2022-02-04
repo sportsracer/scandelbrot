@@ -10,7 +10,8 @@ class MandelbrotViewer(
 ) extends Component:
 
   // Colorization methods to rotate between
-  private var colorizers = RainbowColorizer :: OrbitOriginTrapColorizer :: Nil
+  private var colorizers =
+     EscapeTimeColorizer :: OriginOrbitTrapColorizer :: QuadrantOrbitTrapColorizer :: Nil
 
   private def rotateColorizer(): Unit =
     colorizers = colorizers.tail :+ colorizers.head
