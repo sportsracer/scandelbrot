@@ -26,7 +26,7 @@ object MandelbrotSet:
   import Orbits.*
 
   inline val MaxIterations = 256
-  inline val BoundarySquared = 2 * 2
+  inline val BoundarySquared = 256.0
 
   /** Calculate the orbit for a complex number c! */
   def orbit(c: Complex): Orbit =

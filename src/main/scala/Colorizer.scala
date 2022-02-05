@@ -77,3 +77,25 @@ object QuadrantOrbitTrapColorizer extends Colorizer:
   def getColor(orbit: Orbit): Color =
     val hue = quadrantHue(orbit) + stepsHue(orbit)
     Color.getHSBColor(hue, 1f, 1f)
+
+/** Color a point depending on how close its orbit gets to the real or imaginary
+  * axis.
+  */
+object PickoverStalksColorizer extends Colorizer:
+  /** Get the real and imaginary components closest to zero from the passed list
+    * of points.
+    */
+  private def getClosestCoords(points: List[Complex]): (Double, Double) =
+    points
+      .map(c => (math.abs(c.re), math.abs(c.im)))
+      .reduce((c1, c2) => (c1._1 min c2._1, c1._2 min c2._2))
+
+  def getColor(orbit: Orbit): Color =
+    val (reMin, imMin) = getClosestCoords(orbit.points)
+    val coordMin = reMin min imMin
+
+    Color.getHSBColor(
+      (reMin + imMin).toFloat / 5f + .1f,
+      1f,
+      1f - boundBy(0f, .05f)(coordMin.toFloat)
+    )

@@ -11,7 +11,7 @@ class MandelbrotViewer(
 
   // Colorization methods to rotate between
   private var colorizers =
-     EscapeTimeColorizer :: OriginOrbitTrapColorizer :: QuadrantOrbitTrapColorizer :: Nil
+    EscapeTimeColorizer :: OriginOrbitTrapColorizer :: QuadrantOrbitTrapColorizer :: PickoverStalksColorizer :: Nil
 
   private def rotateColorizer(): Unit =
     colorizers = colorizers.tail :+ colorizers.head
