@@ -2,14 +2,14 @@ import java.awt.Color
 
 import org.scalatest.flatspec._
 
-import Orbits.*
-
 class ColorizerTest extends AnyFlatSpec:
 
   "BlackWhiteColorizer" should "color pixels inside the Mandelbrot set white, all others black" in {
-    assert(BlackWhiteColorizer.getColor(Orbit(Nil, None)) == Color.WHITE)
-    assert(BlackWhiteColorizer.getColor(Orbit(Nil, Some(1))) == Color.BLACK)
-    assert(BlackWhiteColorizer.getColor(Orbit(Nil, Some(256))) == Color.BLACK)
+    assert(BlackWhiteColorizer.getColor(BoundedOrbit(Nil)) == Color.WHITE)
+    assert(BlackWhiteColorizer.getColor(UnboundedOrbit(Nil, 1)) == Color.BLACK)
+    assert(
+      BlackWhiteColorizer.getColor(UnboundedOrbit(Nil, 256)) == Color.BLACK
+    )
   }
 
   "boundBy" should "scale values to the interval [0, 1]" in {

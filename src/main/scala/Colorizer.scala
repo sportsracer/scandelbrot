@@ -1,7 +1,5 @@
 import java.awt.Color
 
-import Orbits.*
-
 trait Colorizer:
 
   /** Compute the color that a complex number should be visualized with.
@@ -18,9 +16,9 @@ trait Colorizer:
 object BlackWhiteColorizer extends Colorizer:
 
   def getColor(orbit: Orbit): Color =
-    orbit.steps match
-      case Some(s) => Color.BLACK
-      case None    => Color.WHITE
+    orbit match
+      case _: UnboundedOrbit => Color.BLACK
+      case _                 => Color.WHITE
 
 /** Return 0 if value is smaller than lower bound, 1 if larger than upper bound,
   * or a linearly scaled value in [0, 1] if in between.
@@ -34,15 +32,15 @@ def boundBy(lower: Float, upper: Float)(value: Float): Float =
 object EscapeTimeColorizer extends Colorizer:
 
   def getColor(orbit: Orbit): Color =
-    orbit.steps match
-      case Some(s) =>
+    orbit match
+      case UnboundedOrbit(_, steps) =>
         // these values were hand-tweaked to look aesthetically pleasing; no meaning behind the magic numbers
-        val sF = s.toFloat
+        val sF = steps.toFloat
         val hue = boundBy(10, 200)(sF) + .8f
         val sat = (1f - boundBy(1, 256)(sF))
         val bri = boundBy(1, 50)(sF) * .8f
         Color.getHSBColor(hue, sat, bri)
-      case None => Color.WHITE
+      case _ => Color.WHITE
 
 /** Color depending on how close a number's orbit gets to the origin. */
 object OriginOrbitTrapColorizer extends Colorizer:
@@ -72,7 +70,9 @@ object QuadrantOrbitTrapColorizer extends Colorizer:
 
   // … and we vary this color depending on escape time
   private def stepsHue(orbit: Orbit): Float =
-    if orbit.bounded then 0f else orbit.steps.get * .27f
+    orbit match
+      case UnboundedOrbit(_, steps) => steps * .27f
+      case _                        => 0f
 
   def getColor(orbit: Orbit): Color =
     val hue = quadrantHue(orbit) + stepsHue(orbit)
