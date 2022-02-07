@@ -40,6 +40,15 @@ case class ComplexViewport(
     val newScale = scale / factor
     ComplexViewport(width, height, center, newScale)
 
+  /** Create a new viewport by scaling the target image size */
+  def scaleBy(factor: Double): ComplexViewport =
+    ComplexViewport(
+      (width * factor).toInt,
+      (height * factor).toInt,
+      center,
+      scale
+    )
+
   /** Create a new viewport centered around (x, y) */
   def centerOn(x: Int, y: Int): ComplexViewport =
     val newCenter = imgSpaceToComplex(x, y)

@@ -6,7 +6,10 @@ Visualize the Mandelbrot set. A toy project I used to teach myself some Scala.
 
 ## Usage
 
-Requires `sbt`. Start program with `sbt run`. Click anywhere in the image to zoom in. Hit space to toggle different colorization methods.
+* Requires `sbt`. Start program with `sbt run`.
+* Click anywhere in the image to zoom in, click right to zoom out.
+* Hit _space_ to toggle different colorization methods.
+* Press _enter_ to save a screenshot of the current view in higher resolution.
 
 ## Development
 
